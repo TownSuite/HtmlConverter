@@ -278,6 +278,186 @@ Conversion setting assume you have the WkHTMLToPDF/WkHTMLToImage (x64) tool inst
         public int? Zoom { get; set; }
 ```
 
+
+## Web API 
+
+HtmlConverter.WebApi is a tiny webapi hosted on top of the HtmlConverter library.  It is meant to be, more or less, a drop in replacement of https://github.com/gogap/go-wkhtmltox.
+
+
+### Docker build and host site
+
+Build a docker image like this:
+
+```bash
+sudo ./build_docker.sh the.path.your.private.docker.registry.com/feed_name/company_name
+```
+
+
+Run the web api docker image.
+
+```bash
+ sudo docker run htmlconverterwebapi -p 80:8080
+ ```
+
+
+### Web api curl example 
+
+Call the webapi project with curl.
+
+```bash
+curl --location --request POST 'https://[your site address here]/v1/convert' \
+--header 'cache-control: no-cache' \
+--header 'content-type: application/json' \
+--header 'Authorization: Basic [Credentials go Here]' \
+--data-raw '{
+        "to" : "image",
+        "fetcher" : {
+        	"name": "data",
+        	"params": {
+            "data":"PGJyIGNsYXNzPSdrLWJyJz48dGFibGUgcm9sZT0nZ3JpZCcgc3R5bGUgPSdib3JkZXItY29sbGFwc2U6c2VwYXJhdGU7IG1pbi13aWR0aDo0ODBweDsgbWFyZ2luOiAwcHg7IG1heC13aWR0aDpub25lOyBlbXB0eS1jZWxsczpzaG93OyBib3JkZXItd2lkdGg6MXB4OyBvdXRsaW5lOiAwcHg7IGJvcmRlcjogMXB4IHNvbGlkOyBwYWRkaW5nOiAxMHB4OyBib3JkZXItcmFkaXVzOjI1cHg7IGJhY2tncm91bmQtY29sb3I6IzIxMjg1MTtjb2xvcjojZmZmO21hcmdpbi1sZWZ0OmF1dG87IG1hcmdpbi1yaWdodDphdXRvJyBjbGFzcz0nay10YWJsZScgPjxjb2xncm91cD48Y29sPjxjb2w+PGNvbD48L2NvbGdyb3VwPjx0Ym9keSByb2xlPSdyb3dncm91cCc+PHRyIHJvbGU9J3JvdycgYWxpZ249J2NlbnRlcic+PHRkIHJvbGU9J2dyaWRjZWxsJyBjb2xzcGFuPSczJz48aDQgc3R5bGU9J3RleHQtYWxpZ246bGVmdDttYXJnaW4tbGVmdDoyMHB4ICFpbXBvcnRhbnQnPjxzcGFuPjxpbWcgc3JjPSJodHRwczovL21pbmlvLmRlbW8udG93bnN1aXRlLmNvbS83OTA0MWNkYi5zaXRlLWltYWdlcy9tYWlubG9nby5wbmc/MjAyMS0wNi0yOC0xMDo1MDowMSIgc3R5bGU9ImhlaWdodDogNDBweCFpbXBvcnRhbnQ7ICI+PC9zcGFuPjwvaDQ+IDwvdGQ+IDwvdHI+IDx0ciByb2xlPSdyb3cnIGFsaWduPSdjZW50ZXInPjx0ZCByb2xlPSdncmlkY2VsbCcgY29sc3Bhbj0nMyc+PGg0IHN0eWxlPSd0ZXh0LWFsaWduOi13ZWJraXQtY2VudGVyOyc+U2lsdmVyPC9oND4gPC90ZD4gPC90cj4gPHRyIHJvbGU9J3JvdycgYWxpZ249J2NlbnRlcic+PHRkIHJvbGU9J2dyaWRjZWxsJz48cCBzdHlsZT0ndGV4dC1hbGlnbjpyaWdodDsnPjxzbWFsbD5OYW1lIC0gPC9zbWFsbD4gICAgICA8L3A+IDxwIHN0eWxlPSd0ZXh0LWFsaWduOnJpZ2h0Oyc+PHNtYWxsPlB1cmNoYXNlIERhdGUgLTwvc21hbGw+PC9wPiA8cCBzdHlsZT0ndGV4dC1hbGlnbjpyaWdodDsnPjxzbWFsbD5WYWxpZCBUaWxsIC0gPC9zbWFsbD48L3A+IDwvdGQ+IDx0ZCByb2xlPSdncmlkY2VsbCcgc3R5bGU9J2JvcmRlci1yaWdodDoxcHggc29saWQ7JyA+PHAgc3R5bGU9J3RleHQtYWxpZ246bGVmdDsnID48c3BhbiBzdHlsZT0ndGV4dC1hbGlnbjotd2Via2l0LWNlbnRlcjsnPiAmbmJzcDtUZXN0IE5hbWU8L3NwYW4+ICAgICAgPC9wPiA8cCBzdHlsZT0ndGV4dC1hbGlnbjpsZWZ0OycgPjxzbWFsbD4mbmJzcDtBcHJpbCAyOSwgMjAyMDwvc21hbGw+PC9wPiA8cCBzdHlsZT0ndGV4dC1hbGlnbjpsZWZ0OycgPjxzbWFsbCBzdHlsZT0nZm9udC1zaXplOjExLjlweDt0ZXh0LWFsaWduOi13ZWJraXQtY2VudGVyOycgPiAmbmJzcDtBcHJpbCAyOSwgMjAyMDwvc21hbGw+PC9wPiA8L3RkPiA8dGQgcm9sZT0nZ3JpZGNlbGwnID48ZGl2IGlkPSJiYXJjb2RlX3ZpZXciIGNsYXNzPSJwdWxsLWxlZnQiPjxpbWcgc3JjPSdkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQUdRQUFBQmtDQUlBQUFEL2dBSURBQUFBQVhOU1IwSUFyczRjNlFBQUFBUm5RVTFCQUFDeGp3djhZUVVBQUFBSmNFaFpjd0FBRHNNQUFBN0RBY2R2cUdRQUFBWlNTVVJCVkhoZTdkRFJqaDAzRWdSUi8vOVBld1ZHUWdnNFJiSW9yd0EvOUhrcVJGWDNuZW0vL3Y2TWZSL3J3ZmV4SG53ZjY4SDNzUjU4SCt2Qjk3RWVmQi9yd2ZleEhud2Y2OEgzc1I1OEgrdkI5N0VlVEQvV1gyTjVZT25TdUVIUzR1TFpkaDFzSi9MQXpmaHVMQThzWFJvM1NGcGNQTnV1ZysxRUhyZ1ozdzFlNmh0bTdFcnJMY1YySFd6UnBVMXVmaHJmRFY3cUcyYnNTdXN0eFhZZGJOR2xUVzUrR3QvcHBjem16Z3lLWmJHNDlJd3UxbHNLWEpqTm5mbHFmS2VYTXBzN015aVd4ZUxTTTdwWWJ5bHdZVFozNXF2eG5WN0tiTzZlNGNMYzJGb1dHem5hOEkxbmMyZStHdC9wcGN6bTdoa3V6STJ0WmJHUm93M2ZlRFozNXF2eG5WN0tiTzdNNXM3Y3ZHVkdGK3V0UzgvbXpudzF2dE5MbWMyZDJkeVptN2ZNNkdLOWRlblozSm12eG5lRGwvcG1ONFBTdlBWczlKYjE0c0s4TTduNWFYdzNlS2x2ZGpNb3pWdlBSbTlaTHk3TU81T2JuOFozWTc3L0w4d1QzRitONzhaOC8xK1lKN2kvbXQ3OXYrU3ZXMXlZNGNKczdwNUIrVVArN050Yi9xZkZoUmt1ek9idUdaUS9aUHIyL0MwYnJ6ZWVRVEYzWnV0T2djdGtIcHBlOCtxZDF4dlBvSmc3czNXbndHVXlEMDJ2L1dyUGpTMlNqbks2bkl0bm95TnBTU3JuN2NIMEdmK0E1OFlXU1VjNVhjN0ZzOUdSdENTVjgvYmc3UmwreG5ZZGJKRzBKQTNrQWRsMXNJWExaTDZhM29GWDI2NkRMWktXcElFOElMc090bkNaekZmVE8vTVBlRzdlZW9hTDUrYXRaK3MrS1U5KzUwbi9wT2ZtcldlNGVHN2VlcmJ1ay9KaytxUi9oaGtVSkMxSnN1dGdhMWxzNUVpeWtDdzJjdlJpK294L2dCa1VKQzFKc3V0Z2ExbHM1RWl5a0N3MmN2VGl0NTZwSDNQcEdWMk1iY3Rhc3RqSTBaSlVzbDZTWnQ2dTBUL2owak82R051V3RXU3hrYU1scVdTOUpNMDhYbTkrZ042eUxsa2Y1VlM2VTVxMzgvbHFlb2ZkcStrdDY1TDFVVTZsTzZWNU81K3ZwbmZnMVhCaHRuT0hDL1BPNUtiNUtjKzI2Ny8wOWhmd2FyZ3cyN25EaFhsbmN0UDhsR2ZiOVY5Ni9ndCs0QWZNM2JPNWUwYVhuY25sNnczejFmVE8rQUZ6OTJ6dW50RmxaM0w1ZXNOOE5iNnJsM2JaT1YreU5mZWVyVHNGU1NYckpXbG1ldDJ2N3JKenZtUnI3ajFiZHdxU1N0Wkwwc3owT3U4Vzk1Nk5ibGxzVEc3QXBXV3huQXN6S0ZmanUrTGVzOUV0aTQzSkRiaTBMSlp6WVFibGFuclhkajlEUjlKeUx1Y1psTGJiMHBGVXp0dC9tTjYxM2MvUWtiU2N5M2tHcGUyMmRDU1Y4L1lmcG5mZzFVaGFrc1M5NTNiZU51NHhLV2ZjWHozOGZUL2szVXZTa2lUdVBiZnp0bkdQU1Ruai9tcDhKN3VDcERMWndtVTNnd0lYWnV3S2ttYW0xM24zc2l0SUtwTXRYSFl6S0hCaHhxNGdhZWJ0R3Y2WjF4bVVzNXd1WFVEZjZac3VvRjlONzh3LzhEcURjcGJUcFF2b08zM1RCZlNyNlYzeno1eG5uQXV6dVh1R0MzTmplemEvL0dGNjEvd3o1eG5ud216dW51SEMzTmllelM5L21ONmhYKzNDYkhSelo4YXVuT1ZVZHYyTXA2Nm1kK2hYdXpBYjNkeVpzU3RuT1pWZFArT3BxL0hkUnRiaTdubUhHeVJKZDRwbHNaekxiaDZhWHZQcWxyVzRlOTdoQmtuU25XSlpMT2V5bTRlbTEvMXFGK2FkdnFHMDNsSXNpK0p0eitnQyt0WDRybDdxd3J6VE41VFdXNHBsVWJ6dEdWMUF2eHJmNmFVOW8wdmpCaTZlalc1WlNIZEt5MXAyL1pmR2QzcHB6K2pTdUlHTFo2TmJGdEtkMHJLV1hmK2w4VjI5bEFJWDVuYmVnaHZMb21UOUwrUkZMNmJQOUE5UTRNTGN6bHR3WTFtVXJQK0Z2T2pGN3p3emtiOW9TVnFTU3RiaXpneEt5M3BKa2l5V3BIZS8vK1JaL3E0bGFVa3FXWXM3TXlndDZ5VkpzbGlTM2syZnpPOE03TzdwU0NyZU1vT0NKSEdmektBZzZXWjhON2E3cHlPcGVNc01DcExFZlRLRGdxU2I4ZDNncGZNYkpDMHVQV05YYk42N1hFMnZKNitlM3lCcGNla1p1Mkx6M3VWcWV1MVhNNXY3Njd6akcyYWpvOHNjenc1TnIvMXFabk4vblhkOHcyeDBkSm5qMmFIcHRWL05iTzZlalg3bXk1N1B1RVRTNG5LZXI4WjNlaW16dVhzMitwa3ZlejdqRWttTHkzbStHdC9wcGN6bTdubUhHeVF0THA1QmFkNTZoa3ZQb0Z5TjcvUlNablAzdk1NTmtoWVh6NkEwYnozRHBXZFFyc1ozZzVmNmhoa3V6S0FnYWRrVkpFa1dHem5hbU56OE5MNGJ2TlEzekhCaEJnVkp5NjRnU2JMWXlOSEc1T2FuOGQyWTc1blJCZWVPcExMYjB0R2xjWE0xdmh2elBUTzY0TnlSVkhaYk9ybzBicTZtZDU4ZnZvLzE0UHRZRDc2UDllRDdXQSsrai9YZysxZ1B2by8xNFB0WUQ3NlA5ZUQ3V0ErK2ovWGcrMWhqZi8vOVB5aDVGNVNjVzk5cUFBQUFBRWxGVGtTdVFtQ0MnPjwvZGl2PjwvdGQ+IDwvdHI+IDx0ciByb2xlPSdyb3cnIGFsaWduPSdjZW50ZXInPjx0ZCByb2xlPSdncmlkY2VsbCcgY29sc3Bhbj0nMic+PHA+PHNwYW4+PC9zcGFuPjwvcD4gPC90ZD4gPC90cj4gPC90Ym9keT48L3RhYmxlPjxiciBjbGFzcz0nay1icic+IA=="
+        	}
+        },
+        "converter":{
+            "format": "jpg",
+            "quality": 94,
+            "width": 390
+        },
+        "template": "binary"
+}'
+```
+
+
+### Sample c# client library.
+
+The most basic bare bones client example to use call the web api.
+
+```cs
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ImageConverter
+    public class HtmlToImageServiceConverter
+    {
+        readonly HttpClient client;
+        readonly string username;
+        readonly string password;
+        readonly string url;
+
+        public HtmlToImageServiceConverter(HttpClient client, string username, string password, string url)
+        {
+            this.client = client;
+            this.username = username;
+            this.password = password;
+            this.url = url;
+        }
+
+        public async Task<byte[]> GenerateAsync(string data, ConverterOptions options)
+        {
+            using (var request_ = new System.Net.Http.HttpRequestMessage())
+            {
+                request_.Method = new System.Net.Http.HttpMethod("POST");
+
+
+                if (!string.IsNullOrWhiteSpace(password) && !string.IsNullOrWhiteSpace(username))
+                {
+                    var byteArray = Encoding.UTF8.GetBytes($"{username}:{password}");
+                    request_.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                }
+
+                request_.RequestUri = new Uri(url);
+
+                var jsonObject = new Root()
+                {
+                    to = "image",
+                    fetcher = new Fetcher()
+                    {
+                        name = "data",
+                        @params = new Params()
+                        {
+                            data = Convert.ToBase64String(Encoding.UTF8.GetBytes(data))
+                        }
+                    },
+                    converter = new Converter()
+                    {
+                        format = options.Format.ToString().ToLower(),
+                        quality = options.Quality,
+                        width = options.Width,
+                        height = options.Height
+
+                    },
+                    template = "binary"
+                };
+
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObject);
+                using (var content = new System.Net.Http.StringContent(json))
+                {
+                    content.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content;
+
+                    var response_ = await client.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+                    var status_ = (int)response_.StatusCode;
+
+                    if (status_ < 200 || status_ > 299)
+                    {
+                        var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        throw new HttpRequestException("The HTTP status code of the response was not expected (" + status_ + "). " + responseData_);
+                    }
+
+                    return await response_.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                }
+            }
+        }
+
+        class Params
+        {
+            public string data { get; set; }
+        }
+
+        class Fetcher
+        {
+            public string name { get; set; }
+            public Params @params { get; set; }
+        }
+
+        class Converter
+        {
+            public string format { get; set; }
+            public int quality { get; set; }
+            public int width { get; set; }
+            public int height { get; set; }
+        }
+
+        class Root
+        {
+            public string to { get; set; }
+            public Fetcher fetcher { get; set; }
+            public Converter converter { get; set; }
+            public string template { get; set; }
+        }
+
+
+    }
+
+    public class ConverterOptions
+    {
+        public ConverterFormats Format { get; set; } = ConverterFormats.JPG;
+        public int Quality { get; set; } = 94;
+        public int Width { get; set; } = 0;
+        public int Height { get; set; } = 0;
+    }
+
+    public enum ConverterFormats
+    {
+        JPG,
+        PNG,
+        PDF
+    }
+}
+```
+
 ## Contributions
 
 - King Kemsty  [@kemsty2](https://twitter.com/kemsty2/)
