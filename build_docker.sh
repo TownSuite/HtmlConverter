@@ -6,7 +6,7 @@ DOCKER_REGISTRY=$1
 echo "Using docker registry $DOCKER_REGISTRY"
 echo "Building htmlconverterwebapi:latest"
 docker build -f ./HtmlConverter.WebApi/Dockerfile -t htmlconverterwebapi --rm=true -m 2GB .
-cd ..
+echo 'htmlconverterwebapi:latest built'
 
 GITHASH="$(git rev-parse --short HEAD)"
 
