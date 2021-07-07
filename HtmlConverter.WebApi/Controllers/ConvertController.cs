@@ -96,7 +96,10 @@ namespace HtmlConverter.WebApi.Controllers
             var bytes = Core.HtmlConverter.ConvertHtmlToPdf(new PdfConfiguration()
             {
                 IsLowQuality = false,
-                Content = decodedString
+                Content = decodedString,
+                Encoding = "utf-8",
+                PageSize = data.converter.pagesize,
+                PageMargins = data.converter.pagemargins
             });
             return new FileContentResult(bytes, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }
@@ -106,7 +109,10 @@ namespace HtmlConverter.WebApi.Controllers
             var bytes = Core.HtmlConverter.ConvertUrlToPdf(new PdfConfiguration()
             {
                 IsLowQuality = false,
-                Url = data.converter.uri
+                Url = data.converter.uri,
+                Encoding = "utf-8",
+                PageSize = data.converter.pagesize,
+                PageMargins = data.converter.pagemargins
             });
             return new FileContentResult(bytes, System.Net.Mime.MediaTypeNames.Application.Pdf);
         }

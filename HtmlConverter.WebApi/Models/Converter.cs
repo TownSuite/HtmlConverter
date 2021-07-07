@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HtmlConverter.Options;
+using System.Collections.Generic;
 
 namespace HtmlConverter.WebApi.Models
 {
@@ -10,5 +11,14 @@ namespace HtmlConverter.WebApi.Models
         public int width { get; set; }
         public int height { get; set; }
         public Dictionary<string, string> extend { get; set; }
+
+        /// <summary>
+        /// Only used with pdf generation.
+        /// </summary>
+        public Margins pagemargins { get; set; }
+        /// <summary>
+        /// Only used with pdf generation.
+        /// </summary>
+        public Size pagesize { get; set; } = Size.A4;
     }
 }
