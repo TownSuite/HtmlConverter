@@ -7,8 +7,8 @@ metadata:
 ---
 apiVersion: v1
 data:
-  BasicAuth__password: [Your Secret Text]
-  BasicAuth__username: [Your Secret Text]
+  BasicAuth__Password: [Your Secret Text]
+  BasicAuth__Username: [Your Secret Text]
 kind: Secret
 metadata:
   name: ts-htmlconverter-secr
@@ -35,15 +35,15 @@ spec:
       - name: htmlconverter
         image: townsuite/htmlconverterwebpi:latest
         env:
-          - name: BasicAuth__password
+          - name: BasicAuth__Password
             valueFrom:
               secretKeyRef:
-                key: BasicAuth__password
+                key: BasicAuth__Password
                 name: ts-htmlconverter-secr
-          - name: BasicAuth__username
+          - name: BasicAuth__Username
             valueFrom:
               secretKeyRef:
-                key: BasicAuth__username
+                key: BasicAuth__Username
                 name: ts-htmlconverter-secr
         ports:
         - containerPort: 80
