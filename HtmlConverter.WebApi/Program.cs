@@ -1,18 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using HtmlConverter.WebApi;
 using ZNetCS.AspNetCore.Authentication.Basic;
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,14 +16,14 @@ IWebHostEnvironment Env = builder.Environment;
 
 builder.Services.AddSingleton<BasicAuthConfigs>(i => Configuration.GetSection("BasicAuth").Get<BasicAuthConfigs>());
 builder.Services.AddControllers();
-builder.Services.AddApiVersioning(config =>
+var apiVersioningBuilder = builder.Services.AddApiVersioning(config =>
 {
     config.DefaultApiVersion = new ApiVersion(1, 0);
     config.AssumeDefaultVersionWhenUnspecified = true;
     config.ReportApiVersions = true;
     config.ApiVersionReader = new UrlSegmentApiVersionReader();
 });
-builder.Services.AddVersionedApiExplorer(options =>
+apiVersioningBuilder.AddApiExplorer(options =>
 {
     options.GroupNameFormat = "VVV";
     options.SubstituteApiVersionInUrl = true;
@@ -64,7 +58,7 @@ if (Env.IsDevelopment())
 }
 
 app.UseOpenApi();
-app.UseSwaggerUi3();
+app.UseSwaggerUi();
 
 app.UseAuthentication();
 

@@ -1,11 +1,10 @@
-﻿using HtmlConverter.Configurations;
+﻿using Asp.Versioning;
+using HtmlConverter.Configurations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HtmlConverter.WebApi.Controllers
 {

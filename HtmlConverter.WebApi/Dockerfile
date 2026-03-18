@@ -25,6 +25,8 @@ RUN apt-get update \
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["HtmlConverter.WebApi/HtmlConverter.WebApi.csproj", "HtmlConverter.WebApi/"]
+COPY ["Directory.Packages.props", "Directory.Packages.props"]
+COPY ["Directory.Build.props", "Directory.Build.props"]
 RUN dotnet restore "HtmlConverter.WebApi/HtmlConverter.WebApi.csproj"
 COPY . .
 WORKDIR "/src/HtmlConverter.WebApi"
