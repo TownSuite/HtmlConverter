@@ -9,8 +9,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends wget xvfb unzip xz-utils wkhtmltopdf ca-certificates fontconfig libjpeg-turbo8 xfonts-75dpi xfonts-base xfonts-utils xfonts-encodings  \
     && mkdir -p /tmp && cd /tmp/ \
     # Install a newish wkhtmltox \
-    && wget -q http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb \
-    && dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb \
+    && wget -q http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb \
+    && dpkg -i libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb \
     && wget -q https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.focal_amd64.deb \
     && dpkg -i wkhtmltox_0.12.5-1.focal_amd64.deb \
     && apt-get -f install -y \
